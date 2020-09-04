@@ -7,6 +7,7 @@ defmodule ObanUi.MixProject do
       version: "0.1.0",
       elixir: "~> 1.10",
       start_permanent: Mix.env() == :prod,
+      compilers: [:phoenix] ++ Mix.compilers(),
       deps: deps()
     ]
   end
@@ -14,7 +15,7 @@ defmodule ObanUi.MixProject do
   # Run "mix help compile.app" to learn about applications.
   def application do
     [
-      extra_applications: [:logger],
+      extra_applications: [:logger, :phoenix],
       mod: {ObanUi.Application, []}
     ]
   end

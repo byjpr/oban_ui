@@ -1,5 +1,7 @@
 # ObanUi
 
+Getting sick of having to check database to view oban jobs. 
+
 **TODO: Add description**
 
 ## Installation

@@ -1,0 +1,4 @@
+
+<%= for job <- @oban_jobs do %>
+  <%= job.state %> <button>Delete</button><br>
+<% end %>
