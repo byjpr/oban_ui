@@ -1,6 +1,33 @@
-<%= for job <- @oban_jobs do %>
-  <%= job.state %>
-  <%= form_for @conn, Routes.job_path(@conn, :delete, job.id), method: :delete %>
-    <input type="submit" value="Delete">
-  </form>
-<% end %>
+<table>
+  <tr>
+    <th>id</th>
+    <th>state</th>
+    <th>queue</th>
+    <th>worker</th>
+    <th>args</th>
+    <th>error</th>
+    <th>attempt</th>
+    <th>inserted_at</th>
+    <th>scheduled_at</th>
+    <th>completed at</th>
+    <th>Action</th>
+  </tr>
+  <%= for job <- @oban_jobs do %>
+    <tr>
+      <td><%= job.id %></td>
+      <td><%= job.state %></td>
+      <td><%= job.queue %></td>
+      <td><%= job.worker %></td>
+      <td><%= inspect job.args %></td>
+      <td><%= job.errors %></td>
+      <td><%= job.attempt %></td>
+      <td><%= job.inserted_at %></td>
+      <td><%= job.scheduled_at %></td>
+      <td><%= job.completed_at %></td>
+
+      <td><%= form_for @conn, :"#{Application.get_env(:oban_ui, :app_name)}.Router.Helpers".job_path(@conn, :delete, job.id), method: :delete %>
+        <input type="submit" value="Delete">
+      </form></td>
+    </tr>
+  <% end %>
+</table>
