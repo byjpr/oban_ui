@@ -1,23 +1,34 @@
 # ObanUi
 
-Getting sick of having to check database to view oban jobs. 
+Unofficial ui for oban. This repo is not a replacement for  [obanpro](https://getoban.pro/)
 
-**TODO: Add description**
+# Who should use this repo?
 
-## Installation
+If you are not able to afford the pro version, you can use this. It lacks a lot of features so PR's are welcomed to improve it.
 
-If [available in Hex](https://hex.pm/docs/publish), the package can be installed
-by adding `oban_ui` to your list of dependencies in `mix.exs`:
+# Installation
+
+Add `{:oban_ui, '~> 0.0.1'}` to your mix.exs file and run `mix deps.get`
+
+# Configuration
+
+ObanUi does not start a separate phoenix application. It will attach to your own phoenix application.
+
+Add this to your **config.exs** file
 
 ```elixir
-def deps do
-  [
-    {:oban_ui, "~> 0.1.0"}
-  ]
+config :oban_ui, connection: {Ecto, MyApp.Repo}, app_name: MyAppWeb
+```
+# Usage
+
+In you router.ex file add the following
+```elixir
+defmodule MyAppWeb.Router do
+  import ObanUi.Router
+  scope "/", MyAppWeb do
+    pipe_through :browser
+    oban_web("/oban")
+  end
 end
 ```
-
-Documentation can be generated with [ExDoc](https://github.com/elixir-lang/ex_doc)
-and published on [HexDocs](https://hexdocs.pm). Once published, the docs can
-be found at [https://hexdocs.pm/oban_ui](https://hexdocs.pm/oban_ui).
-
+`oban_web/1` will accept any path you give to it
