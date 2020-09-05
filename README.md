@@ -1,4 +1,4 @@
-# ObanUi
+# [WIP] ObanUi
 
 Unofficial ui for oban. This repo is not a replacement for  [obanpro](https://getoban.pro/)
 
@@ -32,3 +32,12 @@ defmodule MyAppWeb.Router do
 end
 ```
 `oban_web/1` will accept any path you give to it
+
+# Features
+- List all Jobs
+- Delete single job
+
+# TODO
+- delete all jobs
+- change job state
+- pagination
