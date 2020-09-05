@@ -1,9 +1,9 @@
 defmodule ObanUi.Router do
-  defmacro oban_web(path, opts \\ []) do
+  defmacro oban_web(path) do
     quote bind_quoted: binding() do
       scope path, alias: false, as: false do
-        # opts = ObanUi.Router.__options__(opts)
-        get("/", ObanUi.JobController, :show, opts)
+        get("/", ObanUi.JobController, :show)
+        delete("/:job_id", ObanUi.JobController, :delete)
       end
     end
   end
