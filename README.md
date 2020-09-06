@@ -8,7 +8,7 @@ If you are not able to afford the pro version, you can use this. It lacks a lot 
 
 # Installation
 
-Add `{:oban_ui, '~> 0.0.1'}` to your mix.exs file and run `mix deps.get`
+Add `{:oban_ui, git: "https://github.com/sushant12/oban_ui.git", branch: "master"}` to your mix.exs file and run `mix deps.get`
 
 # Configuration
 
