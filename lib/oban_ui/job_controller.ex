@@ -1,68 +1,76 @@
 defmodule ObanUi.JobController do
   use ObanUi.Web, :controller
+  use ObanUi.Repo
+  import Ecto.Query, warn: false
 
-  def show(conn, _params) do
-    {Ecto, repo} = Application.get_env(:oban_ui, :connection)
+  def index(conn, _params) do
+    oban_jobs = Repo.all(ObanUi.Job)
+    render(conn, "index.html", oban_jobs: oban_jobs)
+  end
 
-    oban_jobs = repo.all(ObanUi.Job)
-    render(conn, "show.html", oban_jobs: oban_jobs)
+  def update(conn, %{"job_id" => job_id}) do
+    Repo.get(ObanUi.Job, job_id)
+    |> ObanUi.Job.changeset(%{"state" => "discarded"})
+    |> Repo.update()
+
+    redirect(conn,
+      to: :"#{Application.get_env(:oban_ui, :app_name)}.Router.Helpers".job_path(conn, :index)
+    )
   end
 
   def delete(conn, %{"job_id" => id}) do
-    {Ecto, repo} = Application.get_env(:oban_ui, :connection)
-
-    repo.get(ObanUi.Job, id) |> repo.delete()
+    Repo.get(ObanUi.Job, id) |> Repo.delete()
 
     redirect(conn,
-      to: :"#{Application.get_env(:oban_ui, :app_name)}.Router.Helpers".job_path(conn, :show)
+      to: :"#{Application.get_env(:oban_ui, :app_name)}.Router.Helpers".job_path(conn, :index)
     )
   end
 
   def available(conn, _params) do
-    {Ecto, repo} = Application.get_env(:oban_ui, :connection)
-
     oban_jobs =
-      Ecto.Query.from(j in ObanUi.Job, where: j.state == "completed")
-      |> repo.all(ObanUi.Job)
+      from(j in ObanUi.Job, where: j.state == "available")
+      |> Repo.all()
 
-    render(conn, "show.html", oban_jobs: oban_jobs)
+    render(conn, "index.html", oban_jobs: oban_jobs)
   end
 
   def scheduled(conn, _params) do
-    {Ecto, repo} = Application.get_env(:oban_ui, :connection)
+    oban_jobs =
+      from(j in ObanUi.Job, where: j.state == "scheduled")
+      |> Repo.all()
 
-    oban_jobs = repo.all(ObanUi.Job)
-    render(conn, "show.html", oban_jobs: oban_jobs)
+    render(conn, "index.html", oban_jobs: oban_jobs)
   end
 
   def executing(conn, _params) do
-    {Ecto, repo} = Application.get_env(:oban_ui, :connection)
+    oban_jobs =
+      from(j in ObanUi.Job, where: j.state == "executing")
+      |> Repo.all()
 
-    oban_jobs = repo.all(ObanUi.Job)
-    render(conn, "show.html", oban_jobs: oban_jobs)
+    render(conn, "index.html", oban_jobs: oban_jobs)
   end
 
   def retryable(conn, _params) do
-    {Ecto, repo} = Application.get_env(:oban_ui, :connection)
+    oban_jobs =
+      from(j in ObanUi.Job, where: j.state == "retryable")
+      |> Repo.all()
 
-    oban_jobs = repo.all(ObanUi.Job)
-    render(conn, "show.html", oban_jobs: oban_jobs)
+    render(conn, "index.html", oban_jobs: oban_jobs)
   end
 
   def completed(conn, _params) do
-    {Ecto, repo} = Application.get_env(:oban_ui, :connection)
-
     oban_jobs =
-      Ecto.Query.from(j in ObanUi.Job, where: j.state == "completed")
-      |> repo.all(ObanUi.Job)
+      from(j in ObanUi.Job, where: j.state == "completed")
+      |> Repo.all()
 
-    render(conn, "show.html", oban_jobs: oban_jobs)
+    render(conn, "index.html", oban_jobs: oban_jobs)
   end
 
   def discarded(conn, _params) do
-    {Ecto, repo} = Application.get_env(:oban_ui, :connection)
+    oban_jobs =
+      from(j in ObanUi.Job, where: j.state == "discarded")
+      |> Repo.all()
 
-    oban_jobs = repo.all(ObanUi.Job)
-    render(conn, "show.html", oban_jobs: oban_jobs)
+    render(conn, "index.html", oban_jobs: oban_jobs)
   end
 end

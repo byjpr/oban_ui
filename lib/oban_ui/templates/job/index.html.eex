@@ -28,6 +28,9 @@
       <td><%= form_for @conn, :"#{Application.get_env(:oban_ui, :app_name)}.Router.Helpers".job_path(@conn, :delete, job.id), method: :delete %>
         <input type="submit" value="Delete">
       </form></td>
+      <td><%= form_for @conn, :"#{Application.get_env(:oban_ui, :app_name)}.Router.Helpers".job_path(@conn, :update, job.id), method: :put %>
+        <input type="submit" value="Discard">
+      </form></td>
     </tr>
   <% end %>
 </table>
