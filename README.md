@@ -1,4 +1,4 @@
-# [WIP] ObanUi
+# ObanUi
 
 Unofficial ui for oban. This repo is not a replacement for  [obanpro](https://getoban.pro/)
 
@@ -17,7 +17,7 @@ ObanUi does not start a separate phoenix application. It will attach to your own
 Add this to your **config.exs** file
 
 ```elixir
-config :oban_ui, connection: {Ecto, MyApp.Repo}, app_name: MyAppWeb
+config :oban_ui, repo: MyApp.Repo, app_name: MyAppWeb
 ```
 # Usage
 
@@ -35,9 +35,8 @@ end
 
 # Features
 - List all Jobs
-- Delete single job
+- Delete or Discard single job
 
 # TODO
 - delete all jobs
-- change job state
 - pagination
