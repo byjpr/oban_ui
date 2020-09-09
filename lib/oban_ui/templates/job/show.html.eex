@@ -1,6 +1,0 @@
-<%= for job <- @oban_jobs do %>
-  <%= job.state %>
-  <%= form_for @conn, Routes.job_path(@conn, :delete, job.id), method: :delete %>
-    <input type="submit" value="Delete">
-  </form>
-<% end %>
