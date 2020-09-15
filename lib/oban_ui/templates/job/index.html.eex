@@ -19,7 +19,7 @@
       <td><%= job.queue %></td>
       <td><%= job.worker %></td>
       <td><%= inspect job.args %></td>
-      <td><%= job.errors %></td>
+      <td><%= inspect job.errors %></td>
       <td><%= job.attempt %></td>
       <td><%= job.inserted_at %></td>
       <td><%= job.scheduled_at %></td>
