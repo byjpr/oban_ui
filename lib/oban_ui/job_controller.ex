@@ -4,12 +4,13 @@ defmodule ObanUi.JobController do
   import Ecto.Query, warn: false
 
   def index(conn, _params) do
-    oban_jobs = Repo.all(ObanUi.Job)
+    oban_jobs = Repo.all(Oban.Job)
     render(conn, "index.html", oban_jobs: oban_jobs)
   end
 
+  @spec update(Plug.Conn.t(), map) :: Plug.Conn.t()
   def update(conn, %{"job_id" => job_id}) do
-    Repo.get(ObanUi.Job, job_id)
+    Repo.get(Oban.Job, job_id)
     |> ObanUi.Job.changeset(%{"state" => "discarded"})
     |> Repo.update()
 
@@ -28,7 +29,7 @@ defmodule ObanUi.JobController do
 
   def available(conn, _params) do
     oban_jobs =
-      from(j in ObanUi.Job, where: j.state == "available")
+      from(j in Oban.Job, where: j.state == "available")
       |> Repo.all()
 
     render(conn, "index.html", oban_jobs: oban_jobs)
@@ -36,7 +37,7 @@ defmodule ObanUi.JobController do
 
   def scheduled(conn, _params) do
     oban_jobs =
-      from(j in ObanUi.Job, where: j.state == "scheduled")
+      from(j in Oban.Job, where: j.state == "scheduled")
       |> Repo.all()
 
     render(conn, "index.html", oban_jobs: oban_jobs)
@@ -44,7 +45,7 @@ defmodule ObanUi.JobController do
 
   def executing(conn, _params) do
     oban_jobs =
-      from(j in ObanUi.Job, where: j.state == "executing")
+      from(j in Oban.Job, where: j.state == "executing")
       |> Repo.all()
 
     render(conn, "index.html", oban_jobs: oban_jobs)
@@ -52,7 +53,7 @@ defmodule ObanUi.JobController do
 
   def retryable(conn, _params) do
     oban_jobs =
-      from(j in ObanUi.Job, where: j.state == "retryable")
+      from(j in Oban.Job, where: j.state == "retryable")
       |> Repo.all()
 
     render(conn, "index.html", oban_jobs: oban_jobs)
@@ -60,7 +61,7 @@ defmodule ObanUi.JobController do
 
   def completed(conn, _params) do
     oban_jobs =
-      from(j in ObanUi.Job, where: j.state == "completed")
+      from(j in Oban.Job, where: j.state == "completed")
       |> Repo.all()
 
     render(conn, "index.html", oban_jobs: oban_jobs)
@@ -68,7 +69,7 @@ defmodule ObanUi.JobController do
 
   def discarded(conn, _params) do
     oban_jobs =
-      from(j in ObanUi.Job, where: j.state == "discarded")
+      from(j in Oban.Job, where: j.state == "discarded")
       |> Repo.all()
 
     render(conn, "index.html", oban_jobs: oban_jobs)
