@@ -1,36 +1,79 @@
-<table>
-  <tr>
-    <th>id</th>
-    <th>state</th>
-    <th>queue</th>
-    <th>worker</th>
-    <th>args</th>
-    <th>error</th>
-    <th>attempt</th>
-    <th>inserted_at</th>
-    <th>scheduled_at</th>
-    <th>completed at</th>
-    <th>Action</th>
-  </tr>
-  <%= for job <- @oban_jobs do %>
-    <tr>
-      <td><%= job.id %></td>
-      <td><%= job.state %></td>
-      <td><%= job.queue %></td>
-      <td><%= job.worker %></td>
-      <td><%= inspect job.args %></td>
-      <td><%= inspect job.errors %></td>
-      <td><%= job.attempt %></td>
-      <td><%= job.inserted_at %></td>
-      <td><%= job.scheduled_at %></td>
-      <td><%= job.completed_at %></td>
+<!-- component -->
+    <div class="bg-gray-100 flex justify-center font-sans">
+            <div class="bg-white shadow-md rounded my-6">
+                <table class="min-w-max w-full table-auto">
+                    <thead>
+                        <tr class="bg-gray-200 text-gray-600 uppercase text-sm leading-normal">
+                            <th class="py-3 px-6 text-center">id</th>
+                            <th class="py-3 px-6 text-center">worker</th>
+                            <th class="py-3 px-6 text-center">queue</th>
+                            <th class="py-3 px-6 text-center">args</th>
+                            <th class="py-3 px-6 text-center">state</th>
+                            <th class="py-3 px-6 text-center">attempt</th>
+                            <th class="py-3 px-6 text-center">created</th>
+                            <th class="py-3 px-6 text-center">Actions</th>
+                        </tr>
+                    </thead>
+                    <tbody class="text-gray-600 text-sm font-light">
+                    <%= for job <- @oban_jobs do %>
+                        <tr class="border-b border-gray-200 hover:bg-gray-100">
+                            <td class="py-3 px-6 text-left">
+                                <%= job.id %>
+                            </td>
+                            <td class="py-3 px-6 text-left">
+                                <%= job.worker %>
+                                <div>
+                                    @<%= job.attempted_by %>
+                                </div>
+                            </td>
+                            <td class="py-3 px-6 text-left">
+                                <%= job.queue %>
+                            </td>
+                            <td class="py-3 px-6 text-left">
+                                <%= inspect job.args %>
+                            </td>
+                            <td class="py-3 px-6 text-center">
+                                <span class="bg-purple-200 text-purple-600 py-1 px-3 rounded-full text-xs"><%= job.state %></span>
+                            </td>
+                            <td class="py-3 px-6 text-left">
+                                <%= job.attempt %>/<%= job.max_attempts %>
+                            </td>
+                            <td class="py-3 px-6 text-left">
+                                <%= job.inserted_at %>
+                            </td>
 
-      <td><%= form_for @conn, :"#{Application.get_env(:oban_ui, :app_name)}.Router.Helpers".job_path(@conn, :delete, job.id), method: :delete %>
-        <input type="submit" value="Delete">
-      </form></td>
-      <td><%= form_for @conn, :"#{Application.get_env(:oban_ui, :app_name)}.Router.Helpers".job_path(@conn, :update, job.id), method: :put %>
-        <input type="submit" value="Discard">
-      </form></td>
-    </tr>
-  <% end %>
-</table>
+
+                            <td class="py-3 px-6 text-center inline-flex">
+                                <div x-data="{showCookieBanner:true}">
+                                    <%= render "_error_modal.html", job: job %>
+                                    <!-- View errors -->
+                                    <button class="py-2 px-8 bg-gray-800 hover:bg-gray-900 text-white rounded font-bold text-sm shadow-xl mr-3" @click.prevent="document.getElementById('errors_<%= job.id %>').showModal()">
+                                        <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5" viewBox="0 0 20 20" fill="currentColor">
+                                            <path fill-rule="evenodd" d="M18 10a8 8 0 11-16 0 8 8 0 0116 0zm-7 4a1 1 0 11-2 0 1 1 0 012 0zm-1-9a1 1 0 00-1 1v4a1 1 0 102 0V6a1 1 0 00-1-1z" clip-rule="evenodd" />
+                                        </svg>
+                                    </button>
+                                </div>
+                                <%= form_for @conn, :"#{Application.get_env(:oban_ui, :app_name)}.Router.Helpers".job_path(@conn, :update, job.id), method: :put %>
+                                    <!-- Stop -->
+                                    <button type="submit" class="py-2 px-8 bg-gray-800 hover:bg-gray-900 text-white rounded font-bold text-sm shadow-xl mr-3">
+                                        <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M21 12a9 9 0 11-18 0 9 9 0 0118 0z" />
+                                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 10a1 1 0 011-1h4a1 1 0 011 1v4a1 1 0 01-1 1h-4a1 1 0 01-1-1v-4z" />
+                                        </svg>
+                                    </button>
+                                </form>
+                                <%= form_for @conn, :"#{Application.get_env(:oban_ui, :app_name)}.Router.Helpers".job_path(@conn, :delete, job.id), method: :delete %>
+                                    <!-- Remove -->
+                                    <button type="submit" class="py-2 px-8 bg-gray-800 hover:bg-gray-900 text-white rounded font-bold text-sm shadow-xl mr-3 bg-red-500 hover:bg-red-600 hover:shadow-lg">
+                                        <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 7l-.867 12.142A2 2 0 0116.138 21H7.862a2 2 0 01-1.995-1.858L5 7m5 4v6m4-6v6m1-10V4a1 1 0 00-1-1h-4a1 1 0 00-1 1v3M4 7h16" />
+                                        </svg>
+                                    </button>
+                                </form>
+                            </td>
+                        </tr>
+                    <% end %>
+                    </tbody>
+                </table>
+            </div>
+    </div>

@@ -1,0 +1,19 @@
+<dialog id="errors_<%= @job.id %>" class="h-auto w-11/12 md:w-11/12 bg-white overflow-hidden overflow-scroll rounded-md p-0">
+    <div class="flex flex-col w-full h-auto">
+        <div class="flex w-full h-auto items-center px-5 py-3">
+            <div class="flex w-2/12 h-auto justify-end">
+                <button @click.prevent="document.getElementById('errors_<%= @job.id %>').close();" class="cursor-pointer focus:outline-none text-gray-400 hover:text-gray-800">
+                    <i class="mdi mdi-close-circle-outline text-2xl"></i>
+                </button>
+            </div>
+        </div>
+        <div class="flex w-full items-center bg-gray-100 border-b border-gray-200 px-5 py-3 text-sm text-left">
+            <code class="block whitespace-pre whitespace-pre-wrap">
+                <%= inspect @job.errors, limit: :infinity, pretty: true %>
+            </code>
+        </div>
+        <div class="flex w-full px-5 py-3 justify-end">
+            <button @click.prevent="document.getElementById('errors_<%= @job.id %>').close();" class="py-2 px-8 bg-gray-800 hover:bg-gray-900 text-white rounded font-bold text-sm shadow-xl">Close</button>
+        </div>
+    </div>
+</dialog>
