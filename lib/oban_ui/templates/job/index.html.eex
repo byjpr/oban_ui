@@ -7,7 +7,7 @@
                             <th class="py-3 px-6 text-center">id</th>
                             <th class="py-3 px-6 text-center">worker</th>
                             <th class="py-3 px-6 text-center">queue</th>
-                            <th class="py-3 px-6 text-center">args</th>
+                            <th class="py-3 px-6 text-center" width="50">args</th>
                             <th class="py-3 px-6 text-center">state</th>
                             <th class="py-3 px-6 text-center">attempt</th>
                             <th class="py-3 px-6 text-center">created</th>
