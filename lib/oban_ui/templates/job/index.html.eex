@@ -1,36 +1,54 @@
-<table>
-  <tr>
-    <th>id</th>
-    <th>state</th>
-    <th>queue</th>
-    <th>worker</th>
-    <th>args</th>
-    <th>error</th>
-    <th>attempt</th>
-    <th>inserted_at</th>
-    <th>scheduled_at</th>
-    <th>completed at</th>
-    <th>Action</th>
-  </tr>
-  <%= for job <- @oban_jobs do %>
-    <tr>
-      <td><%= job.id %></td>
-      <td><%= job.state %></td>
-      <td><%= job.queue %></td>
-      <td><%= job.worker %></td>
-      <td><%= inspect job.args %></td>
-      <td><%= inspect job.errors %></td>
-      <td><%= job.attempt %></td>
-      <td><%= job.inserted_at %></td>
-      <td><%= job.scheduled_at %></td>
-      <td><%= job.completed_at %></td>
-
-      <td><%= form_for @conn, :"#{Application.get_env(:oban_ui, :app_name)}.Router.Helpers".job_path(@conn, :delete, job.id), method: :delete %>
-        <input type="submit" value="Delete">
-      </form></td>
-      <td><%= form_for @conn, :"#{Application.get_env(:oban_ui, :app_name)}.Router.Helpers".job_path(@conn, :update, job.id), method: :put %>
-        <input type="submit" value="Discard">
-      </form></td>
-    </tr>
-  <% end %>
-</table>
+<section class="container mx-auto p-6 font-mono">
+  <div class="w-full mb-8 overflow-hidden rounded-lg shadow-lg">
+    <div class="w-full overflow-x-auto">
+      <table class="w-full">
+        <thead>
+          <tr class="text-md font-semibold tracking-wide text-left text-gray-900 bg-gray-100 uppercase border-b border-gray-600">
+            <th class="px-4 py-3">Worker</th>
+            <th class="px-4 py-3">Attempt</th>
+            <th class="px-4 py-3">Status</th>
+            <th class="px-4 py-3">Date</th>
+            <th class="px-4 py-3"></th>
+          </tr>
+        </thead>
+        <tbody class="bg-white">
+        <%= for job <- @oban_jobs do %>
+          <tr class="text-gray-700">
+            <td class="px-4 py-3 border">
+              <div class="flex items-center text-sm">
+                <div class="relative w-8 h-8 mr-3 rounded-full md:block">
+                  <img class="object-cover w-full h-full rounded-full"
+                      src="https://images.pexels.com/photos/5212324/pexels-photo-5212324.jpeg?auto=compress&cs=tinysrgb&dpr=3&h=750&w=1260"
+                      alt="" loading="lazy" />
+                  <div class="absolute inset-0 rounded-full shadow-inner" aria-hidden="true"></div>
+                </div>
+                <div>
+                  <p class="font-semibold text-black"> <span class="font-normal text-gray-600">#<%= job.id %></span> <%= job.worker %></p>
+                  <p class="text-xs text-gray-600">@<%= job.attempted_by %>::<%= job.queue %></p>
+                  <p class="text-xs text-gray-600 truncate"><%= job.args |> inspect |> ObanUI.Truncate.truncate(length: 90) %></p>
+                </div>
+              </div>
+            </td>
+            <td class="px-4 py-3 text-ms font-semibold border"><%= job.attempt %>/<%= job.max_attempts %></td>
+            <td class="px-4 py-3 text-xs border">
+              <%= render "_state_pill.html", job: job %>
+            </td>
+            <td class="px-4 py-3 text-sm border"><%= ObanUI.Timeago.time_ago_in_words(job.inserted_at) %> ago</td>
+            <td class="px-4 py-3 text-sm border">
+              <div x-data="{showCookieBanner:true}">
+                <%= render "_popover.html", job: job, conn: @conn %>
+                <!-- View errors -->
+                <button class="py-3 px-3 text-white rounded-lg bg-red-500 shadow-lg block md:inline-block" @click.prevent="document.getElementById('errors_<%= job.id %>').showModal()">
+                  <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5" viewBox="0 0 20 20" fill="currentColor">
+                    <path fill-rule="evenodd" d="M18 10a8 8 0 11-16 0 8 8 0 0116 0zm-7 4a1 1 0 11-2 0 1 1 0 012 0zm-1-9a1 1 0 00-1 1v4a1 1 0 102 0V6a1 1 0 00-1-1z" clip-rule="evenodd" />
+                  </svg>
+                </button>
+              </div>
+            </td>
+          </tr>
+        <% end %>
+        </tbody>
+      </table>
+    </div>
+  </div>
+</section>

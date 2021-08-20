@@ -1,0 +1,3 @@
+<span class="px-2 py-1 font-semibold leading-tight <%= state_classes(@job.state) %> rounded-sm">
+    <%= @job.state %>
+</span>

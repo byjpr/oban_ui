@@ -4,7 +4,7 @@ defmodule ObanUi.JobController do
   import Ecto.Query, warn: false
 
   def index(conn, _params) do
-    oban_jobs = Repo.all(Oban.Job)
+    oban_jobs = Oban.Job |> order_by(desc: :id) |> Repo.all()
     render(conn, "index.html", oban_jobs: oban_jobs)
   end
 
