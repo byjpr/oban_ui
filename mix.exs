@@ -22,10 +22,10 @@ defmodule ObanUi.MixProject do
   # Run "mix help deps" to learn about dependencies.
   defp deps do
     [
-      {:phoenix, ">= 1.3.0 and < 1.6.0"},
-      {:phoenix_html, ">= 2.0.0 and <= 3.0.0"},
+      {:phoenix, ">= 1.5.8"},
+      {:phoenix_html, ">= 3.1.0"},
       {:gettext, "~> 0.11"},
-      {:ecto, "~> 2.2 or ~> 3.0"}
+      {:phoenix_ecto, ">= 3.0"}
     ]
   end
 end
